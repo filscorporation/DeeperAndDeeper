@@ -16,4 +16,4 @@ Main game mechanic is blocks physics - each block will compute overall upper pre
 Game created using my own fresh and unfinished engine (https://github.com/filscorporation/Iron).
 All art created using Aseprite.
 
-![Image2](/ReadMeResources/Image.png)
+![Image2](/files/image.png)
