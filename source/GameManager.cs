@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Iron;
 
 namespace IronCustom
@@ -69,14 +70,17 @@ namespace IronCustom
                 case GameMode.Tutorial:
                     player.DelayBeforeBlockDestroyed = 5;
                     player.ColdLevelSpeed = 0.025f;
+                    map.Ores.First(o => o.BlockType == BlockType.IronOre).SpawnChance = 0.25f;
                     break;
                 case GameMode.Easy:
                     player.DelayBeforeBlockDestroyed = 3;
                     player.ColdLevelSpeed = 0.05f;
+                    map.Ores.First(o => o.BlockType == BlockType.IronOre).SpawnChance = 0.15f;
                     break;
                 case GameMode.Hard:
                     player.DelayBeforeBlockDestroyed = 1;
-                    player.ColdLevelSpeed = 0.25f;
+                    player.ColdLevelSpeed = 0.4f;
+                    map.Ores.First(o => o.BlockType == BlockType.IronOre).SpawnChance = 0.075f;
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();

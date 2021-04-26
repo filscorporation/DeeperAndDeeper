@@ -72,8 +72,19 @@ namespace IronCustom
             resourcesAmount[Resources.Uranium] = 0;
             resourcesAmount[Resources.Diamond] = 0;
             
+            if (Map != null)
+            {
+                Map.BlocksStats[BlockType.BuildingBlock].PressureStrength = 5.0f;
+                Map.BlocksStats[BlockType.BuildingBlock].MountStrength = 2.0f;
+            }
+            DrillingSpeed = 1.0f;
+            DrillingRange = 4;
+            MiningSpeed = 0.5f;
+            MiningRange = 2;
+
             UpdateResourcesText();
             UpdateConstructionUI();
+            UpdateUpgradesUI();
         }
 
         public override void OnCreate()
@@ -89,12 +100,16 @@ namespace IronCustom
             Clear();
         }
 
-        public void AddResource(Resources type, int amount)
+        public bool AddResource(Resources type, int amount)
         {
+            if (amount < 0 && resourcesAmount[type] < -amount)
+                return false;
             resourcesAmount[type] += amount;
             UpdateResourcesText();
             UpdateConstructionUI();
             UpdateUpgradesUI();
+            
+            return true;
         }
 
         private Entity CreateButtonInfoUI(List<string> text)
@@ -317,17 +332,20 @@ namespace IronCustom
             switch (upgrade)
             {
                 case Upgrades.BlockStrength:
-                    AddResource(Resources.Titanium, -5);
+                    if (!AddResource(Resources.Titanium, -5))
+                        break;
                     Map.BlocksStats[BlockType.BuildingBlock].PressureStrength += 2;
                     Map.BlocksStats[BlockType.BuildingBlock].MountStrength += 1;
                     break;
                 case Upgrades.MinerSpeed:
-                    AddResource(Resources.Uranium, -3);
+                    if (!AddResource(Resources.Uranium, -3))
+                        break;
                     MiningRange += 1;
                     MiningSpeed *= 2;
                     break;
                 case Upgrades.DrillSpeed:
-                    AddResource(Resources.Diamond, -2);
+                    if (!AddResource(Resources.Diamond, -2))
+                        break;
                     DrillingRange += 2;
                     DrillingSpeed *= 2;
                     break;

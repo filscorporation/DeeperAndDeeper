@@ -58,8 +58,8 @@ namespace IronCustom
         {
             for (int j = blocks.GetLength(1) - MapParams.GroundLevel; j >= 2; j--)
             {
-                int middle = (blocks.GetLength(0) - 8) / 2;
-                for (int i = 0; i < middle; i++)
+                int middle = blocks.GetLength(0) / 2;
+                for (int i = 0; i < middle / 4; i++)
                 {
                     if (CanSpawn(middle - i, j))
                         return new Tuple<int, int>(middle - i, j);
@@ -254,7 +254,7 @@ namespace IronCustom
 
         public Ore OreFromBlockType(BlockType type)
         {
-            return ores.FirstOrDefault(o => o.BlockType == type);
+            return Ores.FirstOrDefault(o => o.BlockType == type);
         }
 
         public bool TryGet(int x, int y, out Block block)

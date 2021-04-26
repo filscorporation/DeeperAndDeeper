@@ -1,4 +1,6 @@
-﻿using Iron;
+﻿using System.Globalization;
+using System.Linq;
+using Iron;
 
 namespace IronCustom
 {
@@ -40,6 +42,14 @@ namespace IronCustom
             if (block.Stats.IsStatic)
             {
                 blockTypeText = CreateLabel("Not simulated", y); y += LABEL_HEIGHT;
+                blockTypeText = CreateLabel("Block info:", y); y += LABEL_HEIGHT;
+                blockTypeText = CreateLabel("Durability: "
+                    + (block.Stats.Durability > 0 ? block.Stats.Durability.ToString(CultureInfo.InvariantCulture) : "infinity"), y); y += LABEL_HEIGHT;
+                Ore ore = block.Map.Ores.FirstOrDefault(o => o.BlockType == block.Type);
+                if (ore != null)
+                {
+                    blockTypeText = CreateLabel("Yield: " + ore.ResourcesInOneBlock, y); y += LABEL_HEIGHT;
+                }
             }
             else
             {

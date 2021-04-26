@@ -46,7 +46,7 @@ namespace IronCustom
         
         private readonly Dictionary<BlockType, AsepriteData> sprites = new Dictionary<BlockType, AsepriteData>();
         public readonly Dictionary<BlockType, BlockStats> BlocksStats = new Dictionary<BlockType, BlockStats>();
-        private readonly List<Ore> ores = new List<Ore>();
+        public readonly List<Ore> Ores = new List<Ore>();
         private Block[,] blocks;
         
         private Sprite frozenSprite;
@@ -141,17 +141,17 @@ namespace IronCustom
             BlocksStats[BlockType.TitaniumOre] = new BlockStats(true)
             {
                 Durability = 6f,
-                Description = "Titanium used to make stronger blocks",
+                Description = "Titanium used to make blocks stronger",
             };
             BlocksStats[BlockType.UraniumOre] = new BlockStats(true)
             {
                 Durability = 3f,
-                Description = "Uranium used for construction speed upgrades",
+                Description = "Uranium used to upgrade miner",
             };
             BlocksStats[BlockType.DiamondOre] = new BlockStats(true)
             {
                 Durability = 8f,
-                Description = "Diamonds used to upgrade mining speed",
+                Description = "Diamonds used to upgrade drill",
             };
 
             BlocksStats[BlockType.BuildingBlock] = new BlockStats(false)
@@ -174,7 +174,7 @@ namespace IronCustom
 
         private void LoadOres()
         {
-            ores.Add(new Ore
+            Ores.Add(new Ore
             {
                 BlockType = BlockType.IronOre,
                 Resource = Resources.Iron,
@@ -186,7 +186,7 @@ namespace IronCustom
                 SpawnChance = 0.075f,
             });
             
-            ores.Add(new Ore
+            Ores.Add(new Ore
             {
                 BlockType = BlockType.TitaniumOre,
                 Resource = Resources.Titanium,
@@ -198,7 +198,7 @@ namespace IronCustom
                 SpawnChance = 0.02f,
             });
             
-            ores.Add(new Ore
+            Ores.Add(new Ore
             {
                 BlockType = BlockType.UraniumOre,
                 Resource = Resources.Uranium,
@@ -210,7 +210,7 @@ namespace IronCustom
                 SpawnChance = 0.015f,
             });
             
-            ores.Add(new Ore
+            Ores.Add(new Ore
             {
                 BlockType = BlockType.DiamondOre,
                 Resource = Resources.Diamond,
@@ -301,7 +301,7 @@ namespace IronCustom
             int depth = 0;
             for (int j = types.GetLength(1) - MapParams.GroundLevel; j >= 2; j--)
             {
-                foreach (Ore ore in ores)
+                foreach (Ore ore in Ores)
                 {
                     if (ore.MinDepthToSpawn <= depth)
                     {
