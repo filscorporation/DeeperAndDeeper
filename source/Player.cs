@@ -29,6 +29,7 @@ namespace IronCustom
 
         public float DelayBeforeBlockDestroyed = 3f;
         public float ColdLevelSpeed = 0.2f;
+        public int StartingIronAmount = 20;
         
         public float DrillingSpeed = 1.0f;
         public int DrillingRange = 4;
@@ -67,7 +68,7 @@ namespace IronCustom
 
         public void Clear()
         {
-            resourcesAmount[Resources.Iron] = 15;
+            resourcesAmount[Resources.Iron] = StartingIronAmount;
             resourcesAmount[Resources.Titanium] = 0;
             resourcesAmount[Resources.Uranium] = 0;
             resourcesAmount[Resources.Diamond] = 0;

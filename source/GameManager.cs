@@ -70,17 +70,23 @@ namespace IronCustom
                 case GameMode.Tutorial:
                     player.DelayBeforeBlockDestroyed = 5;
                     player.ColdLevelSpeed = 0.025f;
+                    player.StartingIronAmount = 20;
+                    map.MapParams.TargetIronOreAmount = 30;
                     map.Ores.First(o => o.BlockType == BlockType.IronOre).SpawnChance = 0.25f;
                     break;
                 case GameMode.Easy:
                     player.DelayBeforeBlockDestroyed = 3;
                     player.ColdLevelSpeed = 0.05f;
-                    map.Ores.First(o => o.BlockType == BlockType.IronOre).SpawnChance = 0.15f;
+                    player.StartingIronAmount = 18;
+                    map.MapParams.TargetIronOreAmount = 22;
+                    map.Ores.First(o => o.BlockType == BlockType.IronOre).SpawnChance = 0.13f;
                     break;
                 case GameMode.Hard:
                     player.DelayBeforeBlockDestroyed = 1;
                     player.ColdLevelSpeed = 0.4f;
-                    map.Ores.First(o => o.BlockType == BlockType.IronOre).SpawnChance = 0.075f;
+                    player.StartingIronAmount = 15;
+                    map.MapParams.TargetIronOreAmount = 15;
+                    map.Ores.First(o => o.BlockType == BlockType.IronOre).SpawnChance = 0.065f;
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();

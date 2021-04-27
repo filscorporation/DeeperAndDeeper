@@ -40,6 +40,7 @@ namespace IronCustom
             public float InitialWallChance = 0.4f;
             public int NullToWallValue = 4;
             public int WallToNullValue = 3;
+            public int TargetIronOreAmount = 20;
         }
 
         public readonly Params MapParams;
@@ -265,6 +266,7 @@ namespace IronCustom
 
             AddLava(types);
             AddOres(types);
+            RemoveUnwinnableStart(types);
 
             return types;
         }
@@ -318,6 +320,42 @@ namespace IronCustom
             }
         }
         
+        private void RemoveUnwinnableStart(BlockType[,] types)
+        {
+            int upperLevel = types.GetLength(1) - MapParams.GroundLevel;
+            int lowerLevel = upperLevel - 8;
+
+            int amount = 0;
+            int left = (types.GetLength(0) - (int) Camera.Main.Width) / 2;
+            int right = types.GetLength(0) - left;
+            for (int j = upperLevel; j > lowerLevel; j--)
+            {
+                for (int i = left; i < right; i++)
+                {
+                    if (types[i, j] == BlockType.IronOre)
+                        amount++;
+                }
+            }
+            
+            Ore ironOre = Ores.First(o => o.BlockType == BlockType.IronOre);
+            int maxIterations = 20;
+            while (amount < MapParams.TargetIronOreAmount)
+            {
+                for (int j = upperLevel; j > lowerLevel; j--)
+                {
+                    int solidCount = SolidNonOreBlocksOnLevel(types, j);
+                    if (solidCount <= 0)
+                        continue;
+                    int x = SolidNonOreBlockX(types, j, Random.NextInt(0, solidCount - 1));
+                    amount += SpawnOreFromBlock(types, x, j, ironOre, MapParams.TargetIronOreAmount - amount);
+                }
+
+                maxIterations--;
+                if (maxIterations <= 0)
+                    return;
+            }
+        }
+        
         private static bool SolidNonOre(BlockType type) => type != BlockType.None && type < BlockType.Lava;
         private static bool IsOre(BlockType type) => type >= BlockType.IronOre && type < BlockType.BuildingBlock;
         private static bool IsPlayers(BlockType type) => type >= BlockType.BuildingBlock;
@@ -351,10 +389,12 @@ namespace IronCustom
             return result - 1;
         }
 
-        private void SpawnOreFromBlock(BlockType[,] types, int x, int y, Ore ore)
+        private int SpawnOreFromBlock(BlockType[,] types, int x, int y, Ore ore, int maxChain = -1)
         {
             types[x, y] = ore.BlockType;
             int chain = Random.NextInt(ore.MinSpawnAmount, ore.MaxSpawnAmount);
+            if (maxChain > 0)
+                chain = chain > maxChain ? maxChain : chain;
             Tuple<int, int> pair = new Tuple<int, int>(x, y);
             for (int i = 1; i < chain; i++)
             {
@@ -364,6 +404,8 @@ namespace IronCustom
 
                 types[pair.Item1, pair.Item2] = ore.BlockType;
             }
+
+            return chain;
         }
 
         private Tuple<int, int> RandomSolidNonOreNeighbour(BlockType[,] types, int x, int y)
